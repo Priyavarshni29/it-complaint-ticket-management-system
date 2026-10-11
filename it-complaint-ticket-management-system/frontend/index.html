@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Support Portal</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">IT</div>
+            <div>
+                <h1>IT Support Portal</h1>
+                <p>Complaint &amp; Ticket Management</p>
+            </div>
+        </div>
+        <span class="system-status">● System Online</span>
+    </header>
+
+    <main class="container">
+        <section class="welcome">
+            <p class="eyebrow">SUPPORT CENTER</p>
+            <h2>How can we help you today?</h2>
+            <p>Report an IT issue and track its progress.</p>
+        </section>
+
+        <!-- Dashboard statistics -->
+        <section class="stats">
+            <article class="stat-card">
+                <span>Total Tickets</span>
+                <strong id="totalTickets">0</strong>
+            </article>
+
+            <article class="stat-card">
+                <span>Open Tickets</span>
+                <strong id="openTickets">0</strong>
+            </article>
+
+            <article class="stat-card">
+                <span>In Progress</span>
+                <strong id="progressTickets">0</strong>
+            </article>
+
+            <article class="stat-card">
+                <span>Resolved</span>
+                <strong id="resolvedTickets">0</strong>
+            </article>
+        </section>
+
+        <!-- Complaint submission form -->
+        <section class="panel">
+            <div class="section-heading">
+                <div>
+                    <h2>Submit a Complaint</h2>
+                    <p>Describe your issue so the IT team can assist you.</p>
+                </div>
+            </div>
+
+            <form id="ticketForm">
+                <div class="form-grid">
+                    <label>
+                        Your Name
+                        <select id="userId" required>
+                            <option value="">Loading users...</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Category
+                        <select id="categoryId" required>
+                            <option value="">Loading categories...</option>
+                        </select>
+                    </label>
+
+                    <label class="full-width">
+                        Complaint Title
+                        <input
+                            id="title"
+                            type="text"
+                            placeholder="e.g. Wi-Fi is not working"
+                            minlength="3"
+                            maxlength="150"
+                            required
+                        >
+                    </label>
+
+                    <label class="full-width">
+                        Description
+                        <textarea
+                            id="description"
+                            rows="4"
+                            placeholder="Explain the issue in detail..."
+                            minlength="5"
+                            required
+                        ></textarea>
+                    </label>
+
+                    <label>
+                        Priority
+                        <select id="priority" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="form-footer">
+                    <p id="formMessage" role="status" aria-live="polite"></p>
+                    <button id="submitButton" type="submit">
+                        Submit Complaint →
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Recent tickets and management -->
+        <section class="panel">
+            <div class="section-heading ticket-heading">
+                <div>
+                    <h2>Recent Tickets</h2>
+                    <p>Complaints currently recorded in the database.</p>
+                </div>
+
+                <button
+                    id="refreshButton"
+                    class="secondary-button"
+                    type="button"
+                >
+                    Refresh
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ticket</th>
+                            <th>Complaint</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Manage</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="ticketTable">
+                        <tr>
+                            <td colspan="6">Loading tickets...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p
+                id="dashboardMessage"
+                class="dashboard-message"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <!-- Ticket status history -->
+            <section id="historySection" hidden>
+                <div class="section-heading">
+                    <div>
+                        <h2 id="historyTitle">Ticket Status History</h2>
+                        <p>Track every recorded status change for this ticket.</p>
+                    </div>
+
+                    <button
+                        id="closeHistoryButton"
+                        class="secondary-button"
+                        type="button"
+                    >
+                        Close History
+                    </button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Previous Status</th>
+                                <th>New Status</th>
+                                <th>Date &amp; Time</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="historyTable">
+                            <tr>
+                                <td colspan="4">
+                                    Select a ticket to view its history.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Ticket details -->
+            <section id="detailsSection" hidden>
+                <div class="section-heading">
+                    <div>
+                        <h2 id="detailsHeading">Ticket Details</h2>
+                        <p>Complete information about this complaint.</p>
+                    </div>
+
+                    <button
+                        id="closeDetailsButton"
+                        class="secondary-button"
+                        type="button"
+                    >
+                        Close Details
+                    </button>
+                </div>
+
+                <div id="ticketDetailsContent"></div>
+            </section>
+        </section>
+    </main>
+
+    <footer>IT Complaint &amp; Ticket Management System</footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
