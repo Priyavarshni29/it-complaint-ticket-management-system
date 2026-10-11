@@ -237,3 +237,6 @@ The project has been tested locally with MySQL and MySQL Workbench.
 The project includes a FastAPI backend, a browser-based frontend, a MySQL database schema, and ticket status-history tracking. It has been tested locally using MySQL Workbench.
 
 This project was developed as a DBMS mini-project to demonstrate relational database design, SQL operations, backend integration, and a working web interface.
+
+## Author 
+Priyavarshni R
