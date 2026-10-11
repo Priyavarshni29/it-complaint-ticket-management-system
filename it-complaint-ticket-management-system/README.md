@@ -77,3 +77,14 @@ it-complaint-ticket-management-system/
 ## Project status
 
 Database-first starter implementation. A frontend and application backend are not included yet.
+
+
+## Testing
+
+The database was tested successfully using MySQL 8.0.
+
+- Created and verified all five database tables.
+- Inserted sample users, support staff, categories, tickets, and ticket history.
+- Executed SQL queries using JOINs, aggregate functions, GROUP BY, and subqueries.
+- Tested ticket status updates and transaction-based history recording.
+- Verified ticket analytics and staff workload reports.
