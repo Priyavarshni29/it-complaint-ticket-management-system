@@ -1,0 +1,17 @@
+# Environment and secrets
+.env
+.venv/
+venv/
+__pycache__/
+
+# IDE/editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary exports
+*.log
+*.sql.gz
