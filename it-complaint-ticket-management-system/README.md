@@ -1,19 +1,45 @@
-# IT Complaint & Ticket Management System
+# NexaDesk — IT Complaint & Ticket Management System
 
-A web-based DBMS mini-project for registering IT complaints, tracking ticket status, maintaining status-change history, and managing IT support operations. The application uses **FastAPI** for the backend, **MySQL** for persistent storage, and a simple web frontend built with HTML, CSS, and JavaScript.
+NexaDesk is a web-based IT Complaint & Ticket Management System developed as a DBMS mini-project. It helps users report IT issues, track ticket progress, communicate about complaints, and manage support operations through a web interface.
+
+The application uses **FastAPI** for the backend, **MySQL** for persistent data storage, **SQLAlchemy** for database interaction, and HTML, CSS, and JavaScript for the frontend.
 
 ## Features
 
-- Register IT complaints with a user, category, priority, and description.
-- View and track submitted tickets.
-- Categorize complaints as Hardware, Software, Network, or Access.
-- Update ticket status through the web portal.
-- Record ticket status changes in a history table.
-- Display ticket statistics and support information through the portal.
-- Store ticket, user, staff, category, and history data in MySQL.
-- Expose REST API endpoints through FastAPI.
-- Provide a database health-check endpoint.
-- Explore and test API endpoints through interactive Swagger documentation.
+### Ticket Management
+- Register and manage IT complaint tickets.
+- Categorize complaints by type, priority, and description.
+- View tickets and track their current status.
+- Update ticket status and maintain ticket history.
+- Support ticket assignment and staff-related workflows.
+
+### Authentication and Access
+- User registration and login endpoints.
+- JWT-based authentication.
+- User-related data management.
+- Environment-based configuration for sensitive application settings.
+
+### Communication and Notifications
+- Ticket-related communication functionality.
+- Notification services for relevant ticket events.
+- Dedicated backend routes for communication and notifications.
+
+### Service-Level Agreement (SLA) Management
+- SLA-related ticket management functionality.
+- Dedicated SLA routes and service logic.
+- A backfill utility for processing existing SLA-related data.
+
+### Database and Backend
+- MySQL integration using SQLAlchemy and PyMySQL.
+- Relational data storage with primary and foreign keys.
+- Database schema migrations managed using Alembic.
+- REST API endpoints built with FastAPI.
+- Interactive API documentation through Swagger UI.
+
+### Web Interface
+- Browser-based frontend using HTML, CSS, and JavaScript.
+- Ticket management through frontend-to-backend API requests.
+- Ticket information and support workflow interaction.
 
 ## Technology Stack
 
@@ -21,107 +47,133 @@ A web-based DBMS mini-project for registering IT complaints, tracking ticket sta
 |---|---|
 | Backend | Python, FastAPI |
 | Database | MySQL 8.0 |
-| ORM and database access | SQLAlchemy, PyMySQL |
+| ORM | SQLAlchemy |
+| Database driver | PyMySQL |
+| Authentication | JWT |
 | Configuration | python-dotenv |
+| Database migrations | Alembic |
 | Frontend | HTML, CSS, JavaScript |
-| API documentation | FastAPI / Swagger UI |
+| API documentation | Swagger UI |
 | Database GUI | MySQL Workbench |
 
 ## Application Architecture
 
-The application follows a simple three-layer architecture:
-
-1. **Frontend:** Provides the web interface for submitting complaints and viewing ticket information.
-2. **Backend:** FastAPI processes API requests, applies ticket-management logic, and communicates with MySQL through SQLAlchemy.
-3. **Database:** MySQL stores application data and ticket status history.
+NexaDesk follows a layered architecture in which the frontend communicates with the FastAPI backend, which processes requests and interacts with the MySQL database.
 
 ```text
 User
- |
- v
-Web Frontend (HTML, CSS, JavaScript)
- |
- v
+  |
+  v
+Web Frontend
+(HTML, CSS, JavaScript)
+  |
+  v
 FastAPI Backend
- |
- v
+  |
+  +-- Authentication Routes
+  +-- Ticket Routes
+  +-- Staff Routes
+  +-- Communication Routes
+  +-- Notification Routes
+  +-- SLA Routes
+  |
+  v
 SQLAlchemy + PyMySQL
- |
- v
+  |
+  v
 MySQL Database
- |
- +-- users
- +-- staff
- +-- categories
- +-- tickets
- +-- ticket_history
 ```
-
-## Database Design
-
-The database is named `it_complaint_system` and contains five main tables.
-
-| Table | Purpose |
-|---|---|
-| `users` | Stores employees who report IT issues. |
-| `staff` | Stores IT support staff information. |
-| `categories` | Stores complaint categories. |
-| `tickets` | Stores complaint details, priority, assignment, and status. |
-| `ticket_history` | Records ticket status changes and related history information. |
-
-### Relationships
-
-- One user can create multiple tickets.
-- One staff member can be assigned multiple tickets.
-- One category can be associated with multiple tickets.
-- One ticket can have multiple history records.
-- A ticket can remain unassigned until support staff are allocated.
-
-### DBMS Concepts Demonstrated
-
-- Primary keys and foreign keys
-- `NOT NULL`, `UNIQUE`, and other integrity constraints
-- One-to-many relationships
-- SQL `JOIN` and `LEFT JOIN`
-- Aggregate functions and `GROUP BY`
-- Subqueries and conditional expressions
-- Transactions and status-history recording
-- Data retrieval, insertion, and updates
 
 ## Project Structure
 
 ```text
 it-complaint-ticket-management-system/
 ├── app/
-│   ├── __init__.py
-│   ├── database.py
 │   ├── main.py
+│   ├── database.py
 │   ├── models.py
 │   ├── schemas.py
-│   └── routes/
+│   ├── auth.py
+│   ├── routes/
+│   │   ├── tickets.py
+│   │   ├── auth_routes.py
+│   │   ├── communications.py
+│   │   ├── notifications.py
+│   │   ├── sla.py
+│   │   └── staff.py
+│   └── services/
 │       ├── __init__.py
-│       └── tickets.py
+│       ├── notifications.py
+│       └── sla.py
 ├── frontend/
 │   ├── index.html
 │   ├── script.js
 │   └── style.css
-├── sql/
-│   └── schema_and_queries.sql
+├── migrations/
+│   ├── env.py
+│   ├── README
+│   ├── script.py.mako
+│   └── versions/
+├── alembic.ini
+├── backfill_sla.py
+├── requirements.txt
 ├── .env.example
 ├── .gitignore
 └── README.md
 ```
 
+*Note: The tree lists the files expected from the current project updates. Retain any additional existing files, such as SQL scripts and package initializers, in the actual repository.*
+
+## Database Design
+
+The database is named `it_complaint_system`.
+
+The core application data includes users, IT support staff, complaint categories, tickets, and ticket history. Additional authentication, communication, notification, and SLA functionality may use further tables depending on the configured models and migrations.
+
+| Entity | Purpose |
+|---|---|
+| Users | Stores user-related information. |
+| Staff | Stores IT support staff information. |
+| Categories | Organizes complaints into categories. |
+| Tickets | Stores complaint details, priority, status, and assignment information. |
+| Ticket History | Records ticket status changes and related history. |
+| Communication and notification data | Supports ticket-related communication and notification functionality where configured. |
+| SLA-related data | Supports service-level agreement tracking where configured. |
+
+### Relationships
+
+- One user can create multiple tickets.
+- One staff member may be assigned multiple tickets.
+- One category can be associated with multiple tickets.
+- One ticket can have multiple history records.
+- Tickets can remain unassigned until support staff are allocated.
+
+The exact relationships depend on the foreign keys defined in the SQLAlchemy models and database migrations.
+
+## DBMS Concepts Demonstrated
+
+- Relational database design.
+- Primary keys and foreign keys.
+- Entity relationships and referential integrity.
+- Integrity constraints such as `NOT NULL` and `UNIQUE`, where defined.
+- SQL `JOIN` and `LEFT JOIN`.
+- Aggregate functions and `GROUP BY`.
+- Subqueries and conditional expressions.
+- Data insertion, retrieval, and updates.
+- Ticket status-history management.
+- Database schema evolution through migrations.
+- Transaction management where implemented.
+
 ## Prerequisites
 
 Install the following before running the application:
 
-- Python 3.10 or later
-- MySQL Server 8.0
-- Git
-- A web browser
+- Python 3.10 or later.
+- MySQL Server 8.0.
+- Git.
+- A web browser.
 
-MySQL Workbench is optional and can be used to view tables and execute SQL queries.
+MySQL Workbench is optional but useful for inspecting tables and executing SQL queries.
 
 ## Setup and Installation
 
@@ -129,7 +181,7 @@ MySQL Workbench is optional and can be used to view tables and execute SQL queri
 
 ```bash
 git clone https://github.com/Priyavarshni29/it-complaint-ticket-management-system.git
-cd it-complaint-ticket-management-system
+cd it-complaint-ticket-management-system/it-complaint-ticket-management-system
 ```
 
 ### 2. Create and activate a virtual environment
@@ -141,7 +193,7 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
-If PowerShell blocks script execution, activate the environment using an appropriate local policy or use Command Prompt:
+If PowerShell blocks activation, you can use Command Prompt:
 
 ```bat
 venv\Scripts\activate.bat
@@ -150,14 +202,14 @@ venv\Scripts\activate.bat
 ### 3. Install dependencies
 
 ```bash
-pip install fastapi "uvicorn[standard]" sqlalchemy pymysql python-dotenv
+pip install -r requirements.txt
 ```
 
 ### 4. Configure environment variables
 
-Create a local `.env` file in the project root using `.env.example` as a template.
+Create a local `.env` file in the project root. Use `.env.example` as a template if it exists.
 
-Configure the following variables with your own local MySQL credentials:
+Configure the database connection values and the secret key required by the application. For example:
 
 ```dotenv
 DB_USER=your_mysql_username
@@ -165,78 +217,108 @@ DB_PASSWORD=your_mysql_password
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=it_complaint_system
+SECRET_KEY=replace_with_a_strong_random_secret
 ```
 
-Do not commit your actual `.env` file or database password to GitHub.
+Use the exact environment-variable names expected by the project's configuration code. The example above must be adjusted if your implementation uses different names.
 
-### 5. Create the database
+**Security:** Never commit your actual `.env` file, database password, or production JWT secret to GitHub.
 
-Open MySQL Workbench or the MySQL command-line client and execute the SQL script:
+### 5. Create and configure the database
 
-```text
-sql/schema_and_queries.sql
+Create the `it_complaint_system` database in MySQL Server if it does not already exist.
+
+Use the project's existing SQL schema or database initialization process to create the required tables. If you use `sql/schema_and_queries.sql`, inspect the script first because it may drop and recreate tables.
+
+For databases managed through Alembic, review the migration configuration and apply the appropriate migrations. For example:
+
+```bash
+alembic upgrade head
 ```
 
-**Important:** Review the script before running it. It drops and recreates project tables, so do not execute it against a database containing data you need to preserve.
-
-Ensure that the database and tables are created successfully before starting the application.
+Run this only after configuring the database connection and confirming that the migrations are appropriate for your existing database. Do not apply a baseline migration blindly to a database that already contains tables or data.
 
 ### 6. Start the application
 
-Run this command from the project root:
+From the project root, run:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-Open the application in your browser:
+Open the following URLs in your browser:
 
 - **Web portal:** http://127.0.0.1:8000/
 - **Swagger API documentation:** http://127.0.0.1:8000/docs
-- **Database health check:** http://127.0.0.1:8000/health/db
+- **ReDoc documentation:** http://127.0.0.1:8000/redoc
 
-The database health-check endpoint verifies the connection and returns the database name when the connection succeeds.
+The endpoints available in Swagger depend on the routers registered in the current application.
 
 ## API Overview
 
-The ticket API includes endpoints for creating, listing, and retrieving tickets, updating ticket status, and viewing ticket history. Additional endpoints provide user and category information.
+The backend contains dedicated route modules for ticket management, authentication, staff, communications, notifications, and SLA functionality.
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `POST` | `/api/tickets/` | Create a ticket |
-| `GET` | `/api/tickets/` | List tickets |
-| `GET` | `/api/tickets/{ticket_id}` | Retrieve a ticket |
-| `GET` | `/api/tickets/users` | Retrieve users |
-| `GET` | `/api/tickets/categories` | Retrieve categories |
-| `PATCH` | `/api/tickets/{ticket_id}/status` | Update ticket status |
-| `GET` | `/api/tickets/{ticket_id}/history` | Retrieve ticket history |
+| Module | Responsibility |
+|---|---|
+| Ticket routes | Ticket creation, retrieval, and status-related operations. |
+| Authentication routes | User registration and login. |
+| Staff routes | Staff-related management operations. |
+| Communication routes | Ticket-related communication. |
+| Notification routes | Notification-related operations. |
+| SLA routes | SLA-related ticket operations. |
 
-Refer to `/docs` for request parameters, schemas, and interactive API testing.
+For the exact HTTP methods, endpoint paths, required request fields, and authentication requirements, refer to the running application's Swagger documentation at `/docs`.
+
+## Database Migrations
+
+NexaDesk includes Alembic configuration and migration files to manage database schema changes.
+
+Typical migration commands include:
+
+```bash
+alembic current
+alembic history
+alembic upgrade head
+```
+
+- `alembic current` displays the current migration revision.
+- `alembic history` lists available migration revisions.
+- `alembic upgrade head` applies pending migrations.
+
+Always back up important database data before applying migrations, particularly when upgrading an existing installation.
 
 ## Testing and Verification
 
-The project has been tested locally with MySQL and MySQL Workbench.
+After starting the application, verify the following against the features enabled in your local configuration:
 
-- Verified the five database tables and their records.
-- Tested ticket creation and retrieval through the application.
-- Updated ticket status through the web portal.
-- Verified the updated ticket status in MySQL Workbench.
-- Checked ticket status-history records in the database.
-- Verified that the frontend, backend, and database work together.
+- The application starts without backend errors.
+- The database connection succeeds.
+- Users can register and log in.
+- Ticket operations work through the API and web interface.
+- Ticket status changes and history are recorded correctly.
+- Staff, communication, and notification endpoints respond as expected.
+- SLA-related functionality works with the configured database schema.
+- Database migrations are consistent with the current schema.
+
+Use Swagger UI and MySQL Workbench to inspect API responses and database records. These are verification steps; do not describe a test as passed until you have run it successfully.
 
 ## Future Improvements
 
-- Add user authentication and role-based access control.
-- Introduce staff assignment workflows.
-- Add automated backend and API tests.
-- Improve ticket filtering and reporting.
-- Add deployment documentation for hosting the application.
+Potential improvements include:
+
+- Expanded role-based access control.
+- More detailed ticket analytics and reporting.
+- Automated unit and integration testing.
+- Improved filtering and search.
+- Deployment configuration and production monitoring.
+- More comprehensive documentation for staff workflows and SLA policies.
 
 ## Project Status
 
-The project includes a FastAPI backend, a browser-based frontend, a MySQL database schema, and ticket status-history tracking. It has been tested locally using MySQL Workbench.
+NexaDesk is a DBMS mini-project combining relational data management with a web-based IT complaint workflow. Its current codebase includes FastAPI route modules for tickets, authentication, staff, communications, notifications, and SLA-related functionality, along with SQLAlchemy models, Alembic migrations, and a browser-based frontend.
 
-This project was developed as a DBMS mini-project to demonstrate relational database design, SQL operations, backend integration, and a working web interface.
+The exact availability of individual features depends on the current database configuration and application implementation.
 
-## Author 
-Priyavarshni R
+## Author
+
+**Priyavarshni R**
