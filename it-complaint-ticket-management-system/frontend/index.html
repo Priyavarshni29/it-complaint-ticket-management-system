@@ -1,230 +1,273 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Support Portal</title>
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NexaDesk | IT Support Portal</title>
+  <link rel="stylesheet" href="/static/style.css?v=3">
+  <script src="/static/script.js?v=3" defer></script>
 </head>
 <body>
-    <header class="topbar">
-        <div class="brand">
-            <div class="brand-icon">IT</div>
-            <div>
-                <h1>IT Support Portal</h1>
-                <p>Complaint &amp; Ticket Management</p>
-            </div>
+<header class="topbar">
+  <a class="brand" href="/">
+    <span class="brand-mark">N</span>
+    <span><b>NexaDesk</b><small>IT Complaint &amp; Ticket Management</small></span>
+  </a>
+  <div class="top-actions">
+    <span id="topbarUser" class="topbar-user hidden"></span>
+    <button id="topbarLogout" class="btn btn-light hidden" type="button">Log out</button>
+  </div>
+</header>
+
+<main class="container">
+  <section id="welcomeSection" class="auth-layout">
+    <div class="hero">
+      <p class="eyebrow">IT SUPPORT, MADE SIMPLE</p>
+      <h1>Technology issues?<br><span>We've got you covered.</span></h1>
+      <p>Report IT problems, track updates and get help from the right support team.</p>
+      <ul>
+        <li>Easy complaint tracking</li>
+        <li>Clear status updates</li>
+        <li>Support-team communication</li>
+        <li>SLA monitoring and escalation</li>
+      </ul>
+    </div>
+
+    <div class="auth-card">
+      <div class="tabs">
+        <button class="tab active" data-auth-mode="login" type="button">Sign in</button>
+        <button class="tab" data-auth-mode="signup" type="button">Create account</button>
+      </div>
+
+      <div id="rolePicker" class="role-picker">
+        <button class="role-card selected" data-role="User" type="button">
+          <b>Employee / User</b><small>Submit complaints and track tickets.</small>
+        </button>
+        <button class="role-card" data-role="Staff" type="button">
+          <b>Support Staff</b><small>Manage assigned tickets and team chat.</small>
+        </button>
+        <button class="role-card" data-role="Team Lead" type="button">
+          <b>Team Lead</b><small>Oversee tickets, staff and escalations.</small>
+        </button>
+      </div>
+
+      <h2 id="authHeading">Welcome back</h2>
+      <p id="authDescription" class="muted">Sign in to continue.</p>
+
+      <form id="loginForm" class="form-stack">
+        <label for="loginEmail">Email address</label>
+        <input id="loginEmail" type="email" required autocomplete="username">
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" required autocomplete="current-password">
+        <button id="loginButton" class="btn btn-primary" type="submit">Sign in securely</button>
+        <p id="loginMessage" class="message"></p>
+      </form>
+
+      <form id="signupForm" class="form-stack hidden">
+        <label for="signupName">Full name</label>
+        <input id="signupName" name="name" required>
+        <label for="signupEmail">Email address</label>
+        <input id="signupEmail" name="email" type="email" required>
+        <label for="signupDepartment">Department</label>
+        <input id="signupDepartment" name="department" required>
+        <label for="signupPassword">Password</label>
+        <input id="signupPassword" name="password" type="password" minlength="8" required>
+        <button id="signupButton" class="btn btn-primary" type="submit">Create account</button>
+        <p class="muted small">Self-registration creates user accounts only.</p>
+        <p id="signupMessage" class="message"></p>
+      </form>
+    </div>
+  </section>
+
+  <section id="dashboardSection" class="dashboard-layout hidden">
+    <aside class="sidebar">
+      <div class="sidebar-profile">
+        <div id="profileAvatar" class="profile-avatar">N</div>
+        <div><strong id="sidebarName">User</strong><small id="sidebarRole">User</small></div>
+      </div>
+      <p class="sidebar-label">WORKSPACE</p>
+      <nav class="sidebar-nav">
+        <button class="nav-link active" data-view="overview" type="button">▦ Overview</button>
+        <button class="nav-link" data-view="tickets" type="button">▤ Tickets</button>
+        <button id="navNewTicket" class="nav-link" data-view="newTicket" type="button">＋ Submit Complaint</button>
+        <button class="nav-link" data-view="history" type="button">◷ Ticket History</button>
+        <button id="navAvailability" class="nav-link hidden" data-view="availability" type="button">◉ My Availability</button>
+        <button id="navQueue" class="nav-link hidden" data-view="queue" type="button">▤ Unassigned Queue</button>
+        <button id="navStaff" class="nav-link hidden" data-view="staff" type="button">♙ Staff Management</button>
+        <button id="navNotifications" class="nav-link" data-view="notifications" type="button">♧ Notifications <span id="notificationBadge" class="count-badge hidden">0</span></button>
+        <button id="navSla" class="nav-link" data-view="sla" type="button">◷ SLA Monitor</button>
+        <button id="navStaffChat" class="nav-link hidden" data-view="staffChat" type="button">▣ Team Chat</button>
+        <button class="nav-link" data-view="about" type="button">ⓘ About NexaDesk</button>
+        <button class="nav-link" data-view="contact" type="button">✉ Contact</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <p>IT Support made simple.</p>
+        <button id="sidebarLogout" class="nav-link logout-link" type="button">↪ Sign out</button>
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <div class="dashboard-heading">
+        <div>
+          <p class="eyebrow">YOUR WORKSPACE</p>
+          <h1 id="dashboardTitle">Dashboard</h1>
+          <p id="welcomeMessage" class="muted">Welcome to NexaDesk.</p>
         </div>
-        <span class="system-status">● System Online</span>
-    </header>
+        <span id="roleBadge" class="role-badge">User</span>
+      </div>
 
-    <main class="container">
-        <section class="welcome">
-            <p class="eyebrow">SUPPORT CENTER</p>
-            <h2>How can we help you today?</h2>
-            <p>Report an IT issue and track its progress.</p>
-        </section>
+      <section id="overviewView" class="dashboard-view">
+        <div class="stats-grid">
+          <article class="stat-card"><p>Total tickets</p><strong id="totalTickets">0</strong></article>
+          <article class="stat-card"><p>Open</p><strong id="openTickets">0</strong></article>
+          <article class="stat-card"><p>In progress</p><strong id="progressTickets">0</strong></article>
+          <article class="stat-card"><p>Resolved / Closed</p><strong id="resolvedTickets">0</strong></article>
+        </div>
+        <article class="panel welcome-panel">
+          <p class="eyebrow">GET STARTED</p>
+          <h2 id="overviewCardTitle">Welcome to your workspace</h2>
+          <p id="overviewCardText" class="muted">Use the sidebar to access your tools.</p>
+          <button id="overviewAction" class="btn btn-primary" type="button">View tickets</button>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><h2>Recent tickets</h2><p class="muted">Latest ticket activity.</p></div><button class="btn btn-light" data-refresh type="button">Refresh</button></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>ID</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="overviewTable"></tbody>
+          </table></div>
+        </article>
+      </section>
 
-        <!-- Dashboard statistics -->
-        <section class="stats">
-            <article class="stat-card">
-                <span>Total Tickets</span>
-                <strong id="totalTickets">0</strong>
-            </article>
+      <section id="ticketsView" class="dashboard-view hidden">
+        <article class="panel">
+          <div class="panel-heading"><div><h2 id="ticketListTitle">Tickets</h2><p class="muted">View and manage ticket progress.</p></div><button class="btn btn-light" data-refresh type="button">Refresh</button></div>
+          <p id="ticketMessage" class="message"></p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>ID</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="ticketTable"></tbody>
+          </table></div>
+        </article>
+      </section>
 
-            <article class="stat-card">
-                <span>Open Tickets</span>
-                <strong id="openTickets">0</strong>
-            </article>
+      <section id="newTicketView" class="dashboard-view hidden">
+        <article class="panel form-panel">
+          <h2>Submit a new complaint</h2>
+          <p class="muted">Describe the issue so the support team can help.</p>
+          <form id="ticketForm" class="form-grid">
+            <div class="field"><label for="ticketTitle">Complaint title</label><input id="ticketTitle" required minlength="3" maxlength="150"></div>
+            <div class="field"><label for="categoryId">Category</label><select id="categoryId" required><option value="">Choose a category</option></select></div>
+            <div class="field"><label for="priority">Priority</label><select id="priority" required><option>Low</option><option selected>Medium</option><option>High</option><option>Critical</option></select></div>
+            <div class="field full"><label for="ticketDescription">Description</label><textarea id="ticketDescription" rows="5" required minlength="5"></textarea></div>
+            <div class="field full"><button id="submitButton" class="btn btn-primary" type="submit">Submit complaint</button><p id="formMessage" class="message"></p></div>
+          </form>
+        </article>
+      </section>
 
-            <article class="stat-card">
-                <span>In Progress</span>
-                <strong id="progressTickets">0</strong>
-            </article>
+      <section id="historyView" class="dashboard-view hidden">
+        <article class="panel">
+          <h2>Ticket History</h2><p class="muted">Select a ticket to view its status and assignment history.</p>
+          <div class="history-picker"><label for="historyTicketId">Select ticket</label><select id="historyTicketId"><option value="">Select a ticket</option></select><button id="loadHistoryButton" class="btn btn-primary" type="button">View history</button></div>
+          <p id="historyMessage" class="message"></p>
+          <div class="table-wrap"><table><thead><tr><th>Previous status</th><th>New status</th><th>Remarks</th><th>Changed at</th></tr></thead><tbody id="historyTable"></tbody></table></div>
+        </article>
+      </section>
 
-            <article class="stat-card">
-                <span>Resolved</span>
-                <strong id="resolvedTickets">0</strong>
-            </article>
-        </section>
-
-        <!-- Complaint submission form -->
-        <section class="panel">
-            <div class="section-heading">
-                <div>
-                    <h2>Submit a Complaint</h2>
-                    <p>Describe your issue so the IT team can assist you.</p>
-                </div>
-            </div>
-
-            <form id="ticketForm">
-                <div class="form-grid">
-                    <label>
-                        Your Name
-                        <select id="userId" required>
-                            <option value="">Loading users...</option>
-                        </select>
-                    </label>
-
-                    <label>
-                        Category
-                        <select id="categoryId" required>
-                            <option value="">Loading categories...</option>
-                        </select>
-                    </label>
-
-                    <label class="full-width">
-                        Complaint Title
-                        <input
-                            id="title"
-                            type="text"
-                            placeholder="e.g. Wi-Fi is not working"
-                            minlength="3"
-                            maxlength="150"
-                            required
-                        >
-                    </label>
-
-                    <label class="full-width">
-                        Description
-                        <textarea
-                            id="description"
-                            rows="4"
-                            placeholder="Explain the issue in detail..."
-                            minlength="5"
-                            required
-                        ></textarea>
-                    </label>
-
-                    <label>
-                        Priority
-                        <select id="priority" required>
-                            <option value="Low">Low</option>
-                            <option value="Medium" selected>Medium</option>
-                            <option value="High">High</option>
-                            <option value="Critical">Critical</option>
-                        </select>
-                    </label>
-                </div>
-
-                <div class="form-footer">
-                    <p id="formMessage" role="status" aria-live="polite"></p>
-                    <button id="submitButton" type="submit">
-                        Submit Complaint →
-                    </button>
-                </div>
+      <section id="detailsView" class="dashboard-view hidden">
+        <article class="panel">
+          <div class="panel-heading"><h2 id="detailsHeading">Ticket details</h2><button id="closeDetailsButton" class="btn btn-light" type="button">Back to tickets</button></div>
+          <div id="ticketDetailsContent"></div>
+          <div id="statusActions" class="status-actions hidden">
+            <label for="newStatus">Update ticket status</label>
+            <select id="newStatus"><option>Open</option><option>In Progress</option><option>Resolved</option><option>Closed</option></select>
+            <button id="updateStatusButton" class="btn btn-primary" type="button">Save status</button>
+            <p id="statusMessage" class="message"></p>
+          </div>
+          <section id="ticketConversation" class="conversation-section hidden">
+            <h3>Ticket conversation</h3>
+            <div id="ticketMessages" class="message-list"></div>
+            <form id="ticketMessageForm" class="form-stack">
+              <label for="ticketMessageText">Write a reply or internal note</label>
+              <select id="ticketMessageVisibility"><option value="Public">Public reply</option><option value="Internal">Internal note</option></select>
+              <textarea id="ticketMessageText" rows="3" required></textarea>
+              <button class="btn btn-primary" type="submit">Send message</button>
+              <p id="ticketMessageStatus" class="message"></p>
             </form>
-        </section>
+          </section>
+        </article>
+      </section>
 
-        <!-- Recent tickets and management -->
-        <section class="panel">
-            <div class="section-heading ticket-heading">
-                <div>
-                    <h2>Recent Tickets</h2>
-                    <p>Complaints currently recorded in the database.</p>
-                </div>
+      <section id="availabilityView" class="dashboard-view hidden">
+        <article class="panel">
+          <h2>My Availability</h2><p class="muted">Control whether you can receive new ticket assignments.</p>
+          <div class="availability-card"><div><strong id="myAvailabilityLabel">Checking availability…</strong><p id="myAvailabilityDescription" class="muted">Availability affects future assignments.</p></div><button id="availabilityToggle" class="btn btn-primary" type="button" disabled>Loading…</button></div>
+          <p id="availabilityMessage" class="message"></p>
+          <div class="stat-card"><p>My active tickets</p><strong id="myActiveTickets">0</strong></div>
+        </article>
+      </section>
 
-                <button
-                    id="refreshButton"
-                    class="secondary-button"
-                    type="button"
-                >
-                    Refresh
-                </button>
-            </div>
+      <section id="queueView" class="dashboard-view hidden">
+        <article class="panel">
+          <div class="panel-heading"><div><h2>Unassigned Tickets</h2><p class="muted">Claim a ticket that matches your specialization.</p></div><button id="refreshQueueButton" class="btn btn-light" type="button">Refresh queue</button></div>
+          <p id="queueMessage" class="message"></p>
+          <div class="table-wrap"><table><thead><tr><th>ID</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Action</th></tr></thead><tbody id="queueTable"></tbody></table></div>
+        </article>
+      </section>
 
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ticket</th>
-                            <th>Complaint</th>
-                            <th>Priority</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                            <th>Manage</th>
-                        </tr>
-                    </thead>
+      <section id="staffView" class="dashboard-view hidden">
+        <article class="panel form-panel">
+          <h2>Create staff login</h2><p class="muted">Create credentials for an existing staff record.</p>
+          <form id="staffForm" class="form-grid">
+            <div class="field"><label for="staffId">Staff ID</label><input id="staffId" type="number" min="1" required></div>
+            <div class="field"><label for="staffEmail">Staff email</label><input id="staffEmail" type="email" required></div>
+            <div class="field full"><label for="staffPassword">Temporary password</label><input id="staffPassword" type="password" minlength="8" required></div>
+            <div class="field full"><button id="staffSubmitButton" class="btn btn-primary" type="submit">Create staff login</button><p id="staffMessage" class="message"></p></div>
+          </form>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><h2>Team Directory</h2><button id="refreshStaffButton" class="btn btn-light" type="button">Refresh</button></div>
+          <p id="staffDirectoryMessage" class="message"></p>
+          <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Specialization</th><th>Level</th><th>Availability</th><th>Active tickets</th><th>Action</th></tr></thead><tbody id="staffDirectoryTable"></tbody></table></div>
+        </article>
+      </section>
 
-                    <tbody id="ticketTable">
-                        <tr>
-                            <td colspan="6">Loading tickets...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+      <section id="notificationsView" class="dashboard-view hidden">
+        <article class="panel">
+          <div class="panel-heading"><div><h2>Notifications</h2><p class="muted">Assignments, replies, status updates and SLA alerts.</p></div><div class="button-row"><button id="refreshNotificationsButton" class="btn btn-light" type="button">Refresh</button><button id="markAllReadButton" class="btn btn-primary" type="button">Mark all read</button></div></div>
+          <p id="notificationsMessage" class="message"></p>
+          <div id="notificationList" class="notification-list"></div>
+        </article>
+      </section>
 
-            <p
-                id="dashboardMessage"
-                class="dashboard-message"
-                role="status"
-                aria-live="polite"
-            ></p>
+      <section id="slaView" class="dashboard-view hidden">
+        <article class="panel">
+          <div class="panel-heading"><div><h2>SLA Monitor</h2><p class="muted">Response and resolution deadlines.</p></div><button id="refreshSlaButton" class="btn btn-light" type="button">Refresh</button></div>
+          <p id="slaMessage" class="message"></p>
+          <div id="slaTargets" class="sla-targets" aria-label="SLA targets by priority"></div>
+          <div class="table-wrap"><table class="sla-table"><thead><tr><th>Ticket</th><th>Title</th><th>Priority</th><th>Status</th><th>Response deadline</th><th>Response SLA</th><th>Resolution deadline</th><th>Resolution SLA</th><th>Action</th></tr></thead><tbody id="slaTable"></tbody></table></div>
+          <section id="escalationHistorySection" class="hidden"><h3 class="section-subtitle">Escalation history</h3>
+          <div class="table-wrap"><table><thead><tr><th>Ticket</th><th>Type</th><th>Reason</th><th>Escalated at</th></tr></thead><tbody id="escalationsTable"></tbody></table></div></section>
+        </article>
+      </section>
 
-            <!-- Ticket status history -->
-            <section id="historySection" hidden>
-                <div class="section-heading">
-                    <div>
-                        <h2 id="historyTitle">Ticket Status History</h2>
-                        <p>Track every recorded status change for this ticket.</p>
-                    </div>
+      <section id="staffChatView" class="dashboard-view hidden">
+        <article class="panel">
+          <div class="panel-heading"><div><h2>Team Chat</h2><p class="muted">Internal communication for support staff and team leads.</p></div><button id="refreshStaffChatButton" class="btn btn-light" type="button">Refresh</button></div>
+          <p id="staffChatMessage" class="message"></p>
+          <div id="staffChatMessages" class="message-list"></div>
+          <form id="staffChatForm" class="form-stack">
+            <label for="staffChatText">Message your support team</label>
+            <textarea id="staffChatText" rows="3" required maxlength="4000"></textarea>
+            <button class="btn btn-primary" type="submit">Send to team</button>
+          </form>
+        </article>
+      </section>
 
-                    <button
-                        id="closeHistoryButton"
-                        class="secondary-button"
-                        type="button"
-                    >
-                        Close History
-                    </button>
-                </div>
+      <section id="aboutView" class="dashboard-view hidden"><article class="panel"><h2>About NexaDesk</h2><p>NexaDesk helps employees report IT issues and track their resolution in one place.</p></article></section>
+      <section id="contactView" class="dashboard-view hidden"><article class="panel"><h2>Contact IT Support</h2><p>Submit a complaint through NexaDesk so the support team can track and resolve it.</p></article></section>
+    </div>
+  </section>
+</main>
 
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Previous Status</th>
-                                <th>New Status</th>
-                                <th>Date &amp; Time</th>
-                                <th>Remarks</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="historyTable">
-                            <tr>
-                                <td colspan="4">
-                                    Select a ticket to view its history.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Ticket details -->
-            <section id="detailsSection" hidden>
-                <div class="section-heading">
-                    <div>
-                        <h2 id="detailsHeading">Ticket Details</h2>
-                        <p>Complete information about this complaint.</p>
-                    </div>
-
-                    <button
-                        id="closeDetailsButton"
-                        class="secondary-button"
-                        type="button"
-                    >
-                        Close Details
-                    </button>
-                </div>
-
-                <div id="ticketDetailsContent"></div>
-            </section>
-        </section>
-    </main>
-
-    <footer>IT Complaint &amp; Ticket Management System</footer>
-
-    <script src="/static/script.js"></script>
+<footer class="footer">© 2026 NexaDesk · IT Complaint &amp; Ticket Management System</footer>
 </body>
 </html>
